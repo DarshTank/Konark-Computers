@@ -3,9 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Phone, MapPin, Mail, Clock, Facebook, Instagram, Youtube, ChevronUp } from 'lucide-react';
-
-const LOGO_URL = "https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/render/image/public/project-uploads/6e8b06cd-6c6d-41c8-8ef2-ca16842a29b4/kon-1768588017897.webp?width=8000&height=8000&resize=contain";
+import { Phone, MapPin, Mail, ChevronUp, ArrowRight } from 'lucide-react';
 
 const Footer = () => {
   const scrollToTop = () => {
@@ -16,157 +14,135 @@ const Footer = () => {
     window.parent.postMessage({ type: "OPEN_EXTERNAL_URL", data: { url: "https://portfolio.darshtank.me/" } }, "*");
   };
 
-  const footerLinks = {
-    services: [
-      { name: 'Laptop Repair', href: '/service' },
-      { name: 'Desktop Repair', href: '/service' },
-      { name: 'Data Recovery', href: '/service' },
-      { name: 'Networking', href: '/service' },
-      { name: 'AMC Services', href: '/service' },
-    ],
-    quickLinks: [
-      { name: 'About Us', href: '/about-us' },
-      { name: 'Services', href: '/service' },
-      { name: 'Products', href: '/product' },
-      { name: 'PC Builder', href: '/build' },
-      { name: 'Contact', href: '/contact' },
-    ],
-  };
-
-  const socialLinks = [
-    { icon: Facebook, href: 'https://www.facebook.com/Konark.Computers/', label: 'Facebook' },
-    { icon: Instagram, href: 'https://www.instagram.com', label: 'Instagram' },
-    { icon: Youtube, href: 'https://www.youtube.com', label: 'YouTube' },
+  const products = [
+    { name: 'USB Mouse', href: '/products' },
+    { name: 'USB Keybord', href: '/products' },
+    { name: 'Hard Disk', href: '/products' },
+    { name: 'Laptop Charger', href: '/products' },
+    { name: 'Laptop Screen', href: '/products' },
+    { name: 'Laptop Battery', href: '/products' },
+    { name: 'Laptop Keybord', href: '/products' },
   ];
 
   return (
-    <footer className="relative bg-zinc-950 border-t border-zinc-800">
-      <div className="container mx-auto px-4 py-16">
+    <footer className="relative bg-zinc-950 border-t border-white/10 overflow-hidden text-zinc-300">
+      {/* Background Glow */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none" />
+      
+      <div className="container mx-auto px-6 py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10 mb-12">
+          
+          {/* Column 1: About US */}
           <div>
-            <div className="mb-5">
-              <Image
-                src={LOGO_URL}
-                alt="Konark Computers"
-                width={140}
-                height={45}
-                className="h-10 w-auto object-contain"
-                style={{ filter: 'brightness(1.1)' }}
-                unoptimized
-              />
-            </div>
-
-            <p className="text-zinc-500 text-sm leading-relaxed mb-5">
-              Your trusted technology partner since 1999. Expert computer repair, networking, and IT consulting across Gujarat.
-            </p>
-
-            <div className="flex gap-2">
-              {socialLinks.map((social, index) => (
-                <a
-                  key={index}
-                  href={social.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="w-9 h-9 rounded-lg bg-zinc-900 border border-zinc-800 flex items-center justify-center text-zinc-500 hover:text-sky-400 hover:border-zinc-700 transition-all"
-                  aria-label={social.label}
-                >
-                  <social.icon size={16} />
-                </a>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-5">Services</h4>
-            <ul className="space-y-2.5">
-              {footerLinks.services.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.href}
-                    className="text-zinc-500 text-sm hover:text-sky-400 transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-5">Quick Links</h4>
-            <ul className="space-y-2.5">
-              {footerLinks.quickLinks.map((link, index) => (
-                <li key={index}>
-                  <Link
-                    href={link.href}
-                    className="text-zinc-500 text-sm hover:text-sky-400 transition-colors"
-                  >
-                    {link.name}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-6">
-              <Image 
-                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/6e8b06cd-6c6d-41c8-8ef2-ca16842a29b4-konarkcomputers-in/assets/images/MSME-e1452579997430-20.png" 
-                alt="MSME Ministry" 
-                width={100} 
-                height={35} 
-                className="bg-white/90 p-1.5 rounded"
-              />
-            </div>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-5">Contact</h4>
+            <h4 className="text-white font-bold text-lg mb-6 uppercase tracking-wide border-b border-primary/30 inline-block pb-1">About US</h4>
             <div className="space-y-4">
-              <a
-                href="https://www.google.com/maps?cid=1162576568112931297"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-start gap-3 text-zinc-500 hover:text-white transition-colors group"
-              >
-                <MapPin size={16} className="text-sky-400 mt-0.5 flex-shrink-0" />
-                <span className="text-sm">234-Vitt Bhavan, Near Gondal Road Flyover, Rajkot - 360002</span>
-              </a>
-
-              <a
-                href="tel:+919426429416"
-                className="flex items-center gap-3 text-zinc-500 hover:text-white transition-colors"
-              >
-                <Phone size={16} className="text-sky-400 flex-shrink-0" />
-                <span className="text-sm">+91 942 642 9416</span>
-              </a>
-
-              <a
-                href="mailto:omesh_tank@yahoo.com"
-                className="flex items-center gap-3 text-zinc-500 hover:text-white transition-colors"
-              >
-                <Mail size={16} className="text-sky-400 flex-shrink-0" />
-                <span className="text-sm">omesh_tank@yahoo.com</span>
-              </a>
-
-              <div className="flex items-center gap-3 text-zinc-500">
-                <Clock size={16} className="text-sky-400 flex-shrink-0" />
-                <span className="text-sm">Mon - Sat: 9AM - 9PM</span>
+              <p className="text-sm leading-relaxed text-zinc-400">
+                KONARK Computers offers customized service-level maintenance programs, providing full on-site maintenance agreements. As an authorized service provider for industry-leading manufacturers, KONARK provides multi-vendor support for servers...
+                <Link href="/about-us" className="text-primary hover:underline ml-1 cursor-pointer">Read more</Link>
+              </p>
+              
+              <div className="pt-2">
+                <Image
+                  src="/assets/images/threebestrated.png"
+                  alt="ThreeBest Rated"
+                  width={150}
+                  height={60}
+                  className="rounded-lg opacity-90 hover:opacity-100 transition-opacity"
+                  unoptimized
+                />
               </div>
             </div>
           </div>
+
+          {/* Column 2: Contact Info */}
+          <div>
+            <h4 className="text-white font-bold text-lg mb-6 uppercase tracking-wide border-b border-primary/30 inline-block pb-1">Contact Info</h4>
+            <div className="space-y-6 text-sm">
+              <div className="flex gap-4">
+                <span className="text-zinc-500 font-semibold min-w-[60px]">Address:</span>
+                <span className="text-zinc-300 leading-relaxed">
+                  234-Vitt Bhavan, Near Gondal Road Flyover,<br />
+                  Rajkot. 360002,<br />
+                  Gujarat India
+                </span>
+              </div>
+              
+              <div className="flex gap-4 items-center">
+                <span className="text-zinc-500 font-semibold min-w-[60px]">Phone:</span>
+                <a href="tel:+919426429416" className="text-zinc-300 hover:text-white transition-colors">
+                  (+91)942-642-9416
+                </a>
+              </div>
+
+              <div className="flex gap-4 items-center">
+                <span className="text-zinc-500 font-semibold min-w-[60px]">Email:</span>
+                <a href="mailto:omesh_tank@yahoo.com" className="text-primary hover:text-primary/80 transition-colors">
+                  omesh_tank@yahoo.com
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Column 3: Products */}
+          <div>
+            <h4 className="text-white font-bold text-lg mb-6 uppercase tracking-wide border-b border-primary/30 inline-block pb-1">Products</h4>
+            <ul className="space-y-2">
+              {products.map((product, index) => (
+                <li key={index}>
+                  <Link 
+                    href={product.href}
+                    className="flex items-center gap-2 text-zinc-400 hover:text-primary transition-colors text-sm group"
+                  >
+                    <ArrowRight size={14} className="text-zinc-600 group-hover:text-primary transition-colors" />
+                    {product.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Column 4: Facebook */}
+          <div>
+             <h4 className="text-white font-bold text-lg mb-6 uppercase tracking-wide border-b border-primary/30 inline-block pb-1">Facebook</h4>
+             <div className="mb-6 rounded-lg overflow-hidden bg-white/5 border border-white/10">
+               <iframe 
+                 src="https://www.facebook.com/plugins/page.php?href=https%3A%2F%2Fwww.facebook.com%2FKonark.Computers%2F&tabs&width=340&height=130&small_header=false&adapt_container_width=true&hide_cover=false&show_facepile=false&appId" 
+                 width="100%" 
+                 height="130" 
+                 style={{ border: 'none', overflow: 'hidden' }} 
+                 scrolling="no" 
+                 frameBorder="0" 
+                 allowFullScreen={true} 
+                 allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                 className="bg-white"
+               />
+             </div>
+             
+             <div className="mt-4">
+              <Image 
+                src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/6e8b06cd-6c6d-41c8-8ef2-ca16842a29b4-konarkcomputers-in/assets/images/MSME-e1452579997430-20.png" 
+                alt="MSME Ministry" 
+                width={180} 
+                height={60} 
+                className="bg-white p-2 rounded-lg opacity-90 hover:opacity-100 transition-opacity"
+              />
+            </div>
+          </div>
+
         </div>
 
-        <div className="pt-8 border-t border-zinc-800">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <p className="text-zinc-600 text-sm">
+        <div className="pt-8 border-t border-white/10">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <p className="text-zinc-500 text-xs">
               © {new Date().getFullYear()} Konark Computers. All Rights Reserved.
             </p>
             
-            <div className="flex items-center gap-4">
-              <p className="text-zinc-600 text-sm">
+            <div className="flex items-center gap-6">
+              <p className="text-zinc-500 text-xs flex items-center gap-1">
                 Developed by{' '}
                 <button
                   onClick={openPortfolio}
-                  className="text-sky-400 hover:text-sky-300 transition-colors cursor-pointer"
+                  className="text-zinc-300 hover:text-primary transition-colors cursor-pointer font-medium"
                 >
                   Darsh Tank
                 </button>
@@ -174,10 +150,10 @@ const Footer = () => {
               
               <button
                 onClick={scrollToTop}
-                className="w-9 h-9 rounded-lg bg-sky-500 hover:bg-sky-600 flex items-center justify-center text-white transition-colors"
+                className="w-10 h-10 rounded-full bg-white/5 border border-white/10 hover:bg-primary hover:border-primary flex items-center justify-center text-white transition-all duration-300 group"
                 aria-label="Back to top"
               >
-                <ChevronUp size={18} />
+                <ChevronUp size={20} className="group-hover:-translate-y-0.5 transition-transform" />
               </button>
             </div>
           </div>

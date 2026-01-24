@@ -57,6 +57,28 @@ export const getProducts = async (): Promise<Product[]> => {
     }
 };
 
+export const getTechLabProducts = async (): Promise<Product[]> => {
+    try {
+        const productsRef = collection(db, "products");
+        // Filter for specific "Tech Lab" categories
+        const techCategories = ['cpu', 'motherboard', 'ram', 'gpu', 'cooling', 'case'];
+        const q = query(
+            productsRef, 
+            where("in_stock", "==", true),
+            where("category", "in", techCategories)
+        );
+        const snapshot = await getDocs(q);
+        
+        return snapshot.docs.map(doc => ({
+            id: doc.id,
+            ...doc.data()
+        } as Product));
+    } catch (error) {
+        console.error("Error fetching tech lab products:", error);
+        return [];
+    }
+};
+
 export const createLead = async (leadData: Partial<Lead>): Promise<{ success: boolean; error?: any }> => {
     try {
         const leadsRef = collection(db, "leads");

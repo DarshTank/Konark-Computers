@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, ChevronLeft, ChevronRight, Cpu, HardDrive, Wifi, Shield } from "lucide-react";
+import { ArrowRight, Cpu, HardDrive, Wifi, Shield } from "lucide-react";
 import { getSettings } from "@/lib/db-service";
+import { motion, AnimatePresence } from "framer-motion";
 
 const slides = [
   {
@@ -39,251 +40,129 @@ const slides = [
 
 export default function HeroSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [displayIndex, setDisplayIndex] = useState(0);
-  const [textVisible, setTextVisible] = useState(true);
   const [tagline, setTagline] = useState("To Win Your Smile");
-  const isAnimatingRef = useRef(false);
 
   useEffect(() => {
     getSettings().then((settings) => {
       if (settings.tagline) setTagline(settings.tagline);
     });
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % slides.length);
+    }, 6000);
+
+    return () => clearInterval(interval);
   }, []);
 
-  const goToSlide = useCallback((index: number) => {
-    if (isAnimatingRef.current || index === currentIndex) return;
-    isAnimatingRef.current = true;
-    
-    setTextVisible(false);
-    
-    setTimeout(() => {
-      setCurrentIndex(index);
-      setDisplayIndex(index);
-      
-      setTimeout(() => {
-        setTextVisible(true);
-        isAnimatingRef.current = false;
-      }, 100);
-    }, 400);
-  }, [currentIndex]);
-
-  const goToNext = useCallback(() => {
-    const next = (currentIndex + 1) % slides.length;
-    goToSlide(next);
-  }, [currentIndex, goToSlide]);
-
-  const goToPrev = useCallback(() => {
-    const prev = currentIndex === 0 ? slides.length - 1 : currentIndex - 1;
-    goToSlide(prev);
-  }, [currentIndex, goToSlide]);
-
-  useEffect(() => {
-    const interval = setInterval(goToNext, 6000);
-    return () => clearInterval(interval);
-  }, [goToNext]);
-
-  const CurrentIcon = slides[displayIndex].icon;
+  const currentSlide = slides[currentIndex];
 
   return (
-    <section className="relative w-full h-screen min-h-[700px] overflow-hidden bg-[#030712]">
-      {slides.map((slide, index) => (
-        <div
-          key={index}
+    <section className="relative w-full h-[90vh] min-h-[700px] overflow-hidden bg-background flex items-center">
+      {/* Background Slides */}
+      <AnimatePresence mode="popLayout">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0, scale: 1.1 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 1.5, ease: "easeInOut" }}
           className="absolute inset-0"
-          style={{
-            opacity: currentIndex === index ? 1 : 0,
-            transition: 'opacity 800ms ease-in-out',
-            zIndex: currentIndex === index ? 1 : 0,
-          }}
         >
           <Image
-            src={slide.image}
-            alt={slide.title}
+            src={currentSlide.image}
+            alt={currentSlide.title}
             fill
-            priority={index === 0}
+            priority={true}
             className="object-cover"
-            style={{
-              transform: currentIndex === index ? 'scale(1.05)' : 'scale(1)',
-              transition: 'transform 8000ms ease-out',
-            }}
+            style={{ filter: "brightness(0.35)" }}
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#030712] via-[#030712]/80 to-[#030712]/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-[#030712]/50" />
-        </div>
-      ))}
+        </motion.div>
+      </AnimatePresence>
+      
+      {/* Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/50 to-transparent z-10" />
 
-      <div className="absolute inset-0 z-10 pointer-events-none">
-        <div 
-          className="absolute inset-0 opacity-[0.02]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }}
-        />
-      </div>
+      {/* Content */}
+      <div className="container mx-auto px-6 relative z-20">
+        <div className="max-w-3xl">
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={currentIndex}
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-zinc-500 mb-8 block">Since 1999</span>
 
-      <div className="relative z-20 h-full flex items-center">
-        <div className="container mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="max-w-xl">
-                <div 
-                  className="mb-8"
-                  style={{
-                    opacity: textVisible ? 1 : 0,
-                    transform: textVisible ? 'translateY(0)' : 'translateY(12px)',
-                    transition: 'opacity 600ms ease-out, transform 600ms ease-out',
-                  }}
-                >
-                  <div className="inline-flex items-center gap-2 px-2 py-1 rounded-full bg-sky-500/10 border border-sky-500/20 mb-3">
-                    <div className="w-2 h-2 rounded-full bg-sky-500 animate-pulse" />
-                    <span className="text-xs font-medium text-sky-400 tracking-wide uppercase">Since 1999</span>
-                  </div>
-                  <div className="relative">
-                    <p className="text-2xl sm:text-3xl lg:text-4xl font-bold">
-                      <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-rose-500 animate-pulse">
-                        &ldquo;{tagline}&rdquo;
-                      </span>
-                    </p>
-                    <div className="absolute -inset-2 bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-rose-500/10 rounded-xl blur-xl -z-10" />
-                  </div>
-                </div>
+              <div className="h-[180px] sm:h-[220px] flex flex-col justify-center">
+                <h1 className="text-5xl sm:text-7xl font-bold text-white leading-tight tracking-tight">
+                  <motion.span
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.2, duration: 0.5 }}
+                    className="block"
+                  >
+                    {currentSlide.title}
+                  </motion.span>
+                  <motion.span
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: 0.4, duration: 0.5 }}
+                    className="block text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
+                  >
+                    {currentSlide.highlight}
+                  </motion.span>
+                </h1>
+              </div>
 
-              <h1 
-                className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-4 leading-[1.1] tracking-tight"
-                style={{
-                  opacity: textVisible ? 1 : 0,
-                  transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
-                  transition: 'opacity 600ms ease-out 100ms, transform 600ms ease-out 100ms',
-                }}
+              <motion.p 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+                className="text-lg text-zinc-300 mb-10 max-w-xl leading-relaxed"
               >
-                {slides[displayIndex].title}
-                <span className="block text-transparent bg-clip-text bg-gradient-to-r from-sky-400 to-blue-500">
-                  {slides[displayIndex].highlight}
-                </span>
-              </h1>
+                {currentSlide.description}
+              </motion.p>
 
-              <p 
-                className="text-base sm:text-lg text-zinc-400 mb-8 leading-relaxed max-w-md"
-                style={{
-                  opacity: textVisible ? 1 : 0,
-                  transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
-                  transition: 'opacity 600ms ease-out 200ms, transform 600ms ease-out 200ms',
-                }}
-              >
-                {slides[displayIndex].description}
-              </p>
-
-              <div 
-                className="flex flex-wrap gap-3"
-                style={{
-                  opacity: textVisible ? 1 : 0,
-                  transform: textVisible ? 'translateY(0)' : 'translateY(20px)',
-                  transition: 'opacity 600ms ease-out 300ms, transform 600ms ease-out 300ms',
-                }}
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.8, duration: 0.5 }}
+                className="flex flex-wrap gap-4"
               >
                 <Link
                   href="/service"
-                  className="group inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-semibold rounded-xl hover:bg-zinc-100 transition-all"
+                  className="group flex items-center gap-2 px-8 py-4 bg-primary text-black font-bold rounded-full hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_30px_rgba(59,130,246,0.5)]"
                 >
-                  Our Services
-                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                  Explore Services
+                  <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
                 <Link
                   href="/contact"
-                  className="inline-flex items-center px-6 py-3 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-xl border border-white/10 transition-all"
+                  className="flex items-center px-8 py-4 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full border border-white/10 backdrop-blur-sm transition-all"
                 >
-                  Get Free Quote
+                  Contact Us
                 </Link>
-              </div>
-            </div>
-
-            <div className="hidden lg:flex items-center justify-center">
-              <div className="relative">
-                <div className="absolute -inset-8 bg-gradient-to-r from-sky-500/20 to-blue-500/20 rounded-full blur-3xl opacity-50" />
-                <div 
-                  className="relative w-64 h-64 rounded-3xl bg-gradient-to-br from-zinc-800/80 to-zinc-900/80 border border-white/10 backdrop-blur-sm flex items-center justify-center"
-                  style={{
-                    boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.05)',
-                    transform: 'perspective(1000px) rotateY(-5deg) rotateX(5deg)',
-                    opacity: textVisible ? 1 : 0.7,
-                    transition: 'opacity 500ms ease-out',
-                  }}
-                >
-                  <div className="absolute inset-0 rounded-3xl overflow-hidden">
-                    <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                  </div>
-                  
-                  <CurrentIcon 
-                    size={80} 
-                    className="text-sky-400"
-                    style={{
-                      opacity: textVisible ? 1 : 0,
-                      transform: textVisible ? 'scale(1)' : 'scale(0.8)',
-                      transition: 'opacity 500ms ease-out, transform 500ms ease-out',
-                    }}
-                    strokeWidth={1}
-                  />
-                  
-                  <div className="absolute -bottom-4 -right-4 w-16 h-16 rounded-xl bg-gradient-to-br from-sky-500 to-blue-600 flex items-center justify-center shadow-lg shadow-sky-500/30">
-                    <span className="text-white font-bold text-sm">{String(displayIndex + 1).padStart(2, '0')}</span>
-                  </div>
-                </div>
-
-                <div 
-                  className="absolute -top-8 -left-8 w-24 h-24 rounded-2xl bg-zinc-800/50 border border-white/5 flex items-center justify-center backdrop-blur-sm"
-                  style={{ transform: 'perspective(500px) rotateY(10deg) rotateX(-10deg)' }}
-                >
-                  <Cpu size={32} className="text-zinc-500" strokeWidth={1} />
-                </div>
-
-                <div 
-                  className="absolute -bottom-12 -left-4 w-20 h-20 rounded-2xl bg-zinc-800/50 border border-white/5 flex items-center justify-center backdrop-blur-sm"
-                  style={{ transform: 'perspective(500px) rotateY(-10deg) rotateX(5deg)' }}
-                >
-                  <HardDrive size={28} className="text-zinc-500" strokeWidth={1} />
-                </div>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-0 right-0 z-30">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              {slides.map((_, index) => (
-                <button
-                  key={index}
-                  onClick={() => goToSlide(index)}
-                  className="h-1 rounded-full transition-all duration-300"
-                  style={{
-                    width: currentIndex === index ? 32 : 8,
-                    backgroundColor: currentIndex === index ? '#0ea5e9' : 'rgba(255,255,255,0.2)',
-                  }}
-                  aria-label={`Go to slide ${index + 1}`}
-                />
-              ))}
-            </div>
-
-            <div className="flex items-center gap-2">
-              <button
-                onClick={goToPrev}
-                className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white transition-all"
-                aria-label="Previous slide"
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                onClick={goToNext}
-                className="w-10 h-10 rounded-full bg-white/5 hover:bg-white/10 border border-white/10 flex items-center justify-center text-white transition-all"
-                aria-label="Next slide"
-              >
-                <ChevronRight size={18} />
-              </button>
-            </div>
-          </div>
+      {/* Slide Indicators */}
+      <div className="absolute bottom-10 left-0 right-0 z-30">
+        <div className="container mx-auto px-6 flex items-center gap-3">
+          {slides.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentIndex(index)}
+              className={`h-1.5 rounded-full transition-all duration-500 ${
+                currentIndex === index ? "w-12 bg-primary" : "w-2 bg-white/20 hover:bg-white/40"
+              }`}
+            />
+          ))}
         </div>
       </div>
     </section>

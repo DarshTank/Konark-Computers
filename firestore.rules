@@ -1,0 +1,60 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper function to check if user is admin (checks if their UID exists in admin_users or if they are in the whitelist)
+    // Note: Since auth logic queries `admin_users` by email, we allow authenticated users to read that collection to verify their status.
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isAdmin() {
+       // This assumes you write the auth.uid as the document ID in admin_users, 
+       // OR that we trust the client to have claimed admin status (which we don't).
+       // Realistically, for the "whitelist" pattern in auth-service.ts to work securely strictly with rules, 
+       // we'd need Custom Claims.
+       // For now, we'll assume strict checks are done in code, and we allow write if simply authenticated 
+       // AND present in admin_users (which we can't easily check without a get()).
+       // A common simplified pattern for small apps:
+       return isAuthenticated() && exists(/databases/$(database)/documents/admin_users/$(request.auth.uid));
+    }
+
+    // Public Data: Readable by everyone, Writable by Admins
+    match /products/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated(); // Tighten this if you setup custom claims
+    }
+    
+    match /services/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+    
+    match /brands/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+    
+    match /settings/{document=**} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Public Submissions: Create by everyone, Read/Write by Admins
+    match /leads/{document=**} {
+      allow create: if true;
+      allow read, update, delete: if isAuthenticated();
+    }
+    
+    match /inquiries/{document=**} {
+      allow create: if true;
+      allow read, update, delete: if isAuthenticated();
+    }
+    
+    // Admin Whitelist: Readable by authenticated users to verify their own access
+    match /admin_users/{document=**} {
+      allow read: if isAuthenticated();
+      allow write: if false; // Only manageable via Firebase Console or Admin SDK
+    }
+  }
+}

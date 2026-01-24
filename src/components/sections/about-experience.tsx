@@ -17,13 +17,11 @@ const AboutExperience = () => {
   ];
 
   return (
-    <section className="relative py-24 overflow-hidden bg-[#030712]">
-      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-zinc-800 to-transparent" />
-      
-      <div className="container mx-auto px-4 relative z-10">
+    <section className="relative py-24 overflow-hidden bg-zinc-950">
+      <div className="container mx-auto px-6 relative z-10">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div className="relative">
-            <div className="relative rounded-2xl overflow-hidden border border-zinc-800">
+          <div className="relative group">
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl transition-transform duration-500 group-hover:scale-[1.02]">
               <Image
                 src="https://slelguoygbfzlpylpxfs.supabase.co/storage/v1/object/public/test-clones/6e8b06cd-6c6d-41c8-8ef2-ca16842a29b4-konarkcomputers-in/assets/images/kon-7.webp"
                 alt="Konark Computers Team"
@@ -31,33 +29,30 @@ const AboutExperience = () => {
                 height={500}
                 className="w-full h-auto object-cover"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-80" />
             </div>
 
-            <div className="absolute -bottom-6 -right-6 p-5 rounded-xl bg-zinc-900 border border-zinc-800 shadow-xl">
+            <div className="absolute -bottom-6 -right-6 p-6 rounded-2xl glass border border-white/20 shadow-2xl backdrop-blur-md">
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-sky-500 flex items-center justify-center">
-                  <span className="text-xl font-bold text-white">{yearsExp}+</span>
+                <div className="w-16 h-16 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/30">
+                  <span className="text-2xl font-bold text-white">{yearsExp}+</span>
                 </div>
                 <div>
-                  <p className="text-sm text-zinc-400">Years of</p>
-                  <p className="text-lg font-semibold text-white">Excellence</p>
+                  <p className="text-sm text-zinc-300 font-medium">Years of</p>
+                  <p className="text-xl font-bold text-white">Excellence</p>
                 </div>
               </div>
             </div>
           </div>
 
           <div>
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-orange-500/10 border border-orange-500/20 mb-6">
-              <Building2 size={14} className="text-orange-400" />
-              <span className="text-xs font-semibold text-orange-400 tracking-wide uppercase">About Us</span>
-            </div>
+            <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-zinc-500 mb-8">About Us</span>
 
-            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-              {yearsExp} Years of Excellence in IT Services
+            <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6 leading-tight">
+              {yearsExp} Years of <span className="text-gradient-primary">Excellence</span> in IT Services
             </h2>
 
-            <div className="space-y-4 text-zinc-400 mb-8">
+            <div className="space-y-6 text-zinc-400 mb-10 text-lg leading-relaxed">
               <p>
                 Established in {FOUNDING_YEAR}, Konark Computers has been the trusted technology partner for banks, corporate clients, industrial corporations, hospitals, and educational institutions across Gujarat.
               </p>
@@ -66,34 +61,34 @@ const AboutExperience = () => {
               </p>
             </div>
 
-            <div className="grid grid-cols-2 gap-4 mb-8">
+            <div className="grid grid-cols-2 gap-4 mb-10">
               {stats.map((stat, index) => (
                 <div
                   key={index}
-                  className="p-4 rounded-xl bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700 transition-colors group"
+                  className="p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-primary/30 transition-all duration-300 group"
                 >
-                  <div className="flex items-center gap-3 mb-1">
-                    <div className="w-9 h-9 rounded-lg bg-sky-500/10 flex items-center justify-center">
-                      <stat.icon size={18} className="text-sky-400" />
+                  <div className="flex items-center gap-3 mb-2">
+                    <div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
+                      <stat.icon size={20} className="text-primary" />
                     </div>
                     <span className="text-2xl font-bold text-white">{stat.value}</span>
                   </div>
-                  <p className="text-xs text-zinc-500 ml-12">{stat.label}</p>
+                  <p className="text-xs font-medium text-zinc-500 ml-1 group-hover:text-zinc-400 transition-colors">{stat.label}</p>
                 </div>
               ))}
             </div>
 
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-4">
               <Link
                 href="/about-us"
-                className="group inline-flex items-center gap-2 px-6 py-3 bg-sky-500 hover:bg-sky-600 text-white font-semibold rounded-lg transition-all shadow-lg shadow-sky-500/25"
+                className="group inline-flex items-center gap-2 px-8 py-3.5 bg-primary hover:bg-primary/90 text-white font-bold rounded-full transition-all shadow-[0_0_20px_rgba(59,130,246,0.25)] hover:shadow-[0_0_30px_rgba(59,130,246,0.35)] hover:-translate-y-0.5"
               >
                 Learn More
                 <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center px-6 py-3 bg-zinc-800 hover:bg-zinc-700 text-white font-semibold rounded-lg border border-zinc-700 transition-all"
+                className="inline-flex items-center px-8 py-3.5 bg-white/5 hover:bg-white/10 text-white font-semibold rounded-full border border-white/10 backdrop-blur-sm transition-all hover:-translate-y-0.5"
               >
                 Get Free Quote
               </Link>
@@ -106,3 +101,4 @@ const AboutExperience = () => {
 };
 
 export default AboutExperience;
+
